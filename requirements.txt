@@ -1,0 +1,7 @@
+pandas
+numpy
+torch
+scikit-learn
+torchtext
+Flask
+gunicorn==20.1.0

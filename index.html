@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genre Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/static/musicbackground.jpg'); /* Change this to your image path */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .big-title {
+            font-size: 2.5em;
+            color: #ffffff;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        h1, h2 {
+            color: #ffffff;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        h2 {
+            font-size: 1.5em;
+        }
+
+        textarea {
+            width: 800px;  /* Increased width */
+            height: 400px;  /* Increased height */
+            padding: 10px;
+            font-size: 1.1em;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+
+        #result {
+            margin-top: 30px;      /* Increased spacing above the results */
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 20px;        /* Increased padding for better spacing */
+            border-radius: 5px;
+            color: #ffffff;
+            font-size: 1.5em;     /* Increased font size */
+            line-height: 1.8;     /* Added line height for better spacing between lines */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="big-title">Multi-label Classification for Music Genre</div>
+    <h1>Enter Lyrics to Predict Genre</h1>
+    <textarea id="lyric"></textarea>
+    <button onclick="predictGenre()">Predict</button>
+    <h2>Top 5 Predicted Genres:</h2>
+    <div id="result"></div>
+
+    <script>
+        function predictGenre() {
+            var lyric = document.getElementById('lyric').value;
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ lyric: lyric })
+            })
+            .then(response => response.json())
+            .then(data => {
+                var result = "";
+                data.forEach(item => {
+                    result += item.genre + ": " + item.probability + "<br>";
+                });
+                document.getElementById('result').innerHTML = result;
+            });
+        }
+    </script>
+</body>
+</html>
